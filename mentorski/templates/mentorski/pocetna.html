@@ -1,0 +1,35 @@
+{% extends "mentorski/base.html" %}
+
+{% block content %}
+
+<div class="content-section col-md-8 offset-md-2">
+<h2 style="text-align: center;">Mentorski sustav</h2>
+<blockquote class="blockquote mb-0">
+    <p style="text-align: center; font-style: italic;">Sustav za upravljanje upisa studenata</p>
+  </blockquote>
+
+<div class="card mx-auto" style="width: 22rem; margin-top: 3rem; height: auto;">
+    <div class="card">
+        <h5 class="card-header">Izbornik</h5>
+        <div class="card-body">
+            {% if user.is_authenticated %}
+            <a class="btn btn-outline-secondary btn-block" href="{% url 'mentorski-profil' %}" role="button">Moj profil</a>
+            <div class="divider"></div>
+            {%if user.is_staff or user.role == 'mentor' %}
+                  <a class="btn btn-outline-secondary btn-block" href="{% url 'mentorski-predmeti' %}" role="button">Svi predmeti</a>
+                  <div class="divider"></div>
+                  <a class="btn btn-outline-secondary btn-block" href="{% url 'mentorski-korisnici' %}" role="button">Svi studenti</a>
+                  {% else %}
+                  <a class="btn btn-outline-secondary btn-block" href="{% url 'mentorski-upisni-list' user.id %}" role="button">Moj upisni list</a>                  {% endif %}
+            {% else %}
+              <a class="btn btn-outline-secondary btn-block" href="{% url 'mentorski-prijava' %}" role="button">Prijava</a>
+              <div class="divider"></div>
+              <a class="btn btn-outline-secondary btn-block" href="{% url 'mentorski-registracija' %}" role="button">Registracija</a>
+            {% endif %}
+        </div>
+      </div>
+
+
+</div>
+
+{% endblock %}

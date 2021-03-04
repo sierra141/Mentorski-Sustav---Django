@@ -1,0 +1,21 @@
+{% extends "mentorski/base.html" %}
+{% block content %}
+  <article class="media content-section col-md-8 offset-md-2">
+    <div class="media-body">
+      <div class="article-metadata">
+        {% if user.role == 'mentor' %}
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'mentorski-predmeti-update' object.id %}">Ažuriraj</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'mentorski-predmeti-delete' object.id %}">Izbriši</a>
+          </div>
+        {% endif %}
+      </div>
+      <h2 class="article-title">Naziv predmeta: {{ object.ime }}</h2>
+      <p class="article-content">Opis predmeta: {{ object.program }}</p>
+      <p class="article-content">Kod predmeta: {{ object.kod }}</p>
+      <p class="article-content">Broj ECTS bodova: {{ object.bodovi }}</p>
+      <p class="article-content">Izborni predmet: {{ object.izborni }}</p>
+      <a class="btn btn-primary btn-sm mt-1 mb-1" href="{% url 'mentorski-predmeti' %}">Natrag</a>
+    </div>
+  </article>
+{% endblock content %}

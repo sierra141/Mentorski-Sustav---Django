@@ -1,0 +1,109 @@
+{% extends "mentorski/base.html" %}
+
+{% block content %}
+
+<div class="content-section w-100">
+  <h2 class="border-bottom mb-4">Prijavljeni ste kao: {{ user.username }}
+    {% if user.role == 'student' %}, {{ user.status }}
+  {% endif %}</h2>
+  {% if user.role == 'mentor' %}
+  {% for student in predmeti.studenti %}
+  <h2 class="border-bottom mb-4">Upisni list studenta: {{ student.username }}, Status: {{ student.status }}</h2>
+  {% endfor %}
+  {% endif %}
+  {% if user.role == 'mentor' %}
+  <a class="btn btn-outline-secondary" href="{% url 'mentorski-korisnici' %}">Povratak na listu studenata</a>
+  {% endif %}
+</div>
+  
+  <div class="content-section w-100 table-responsive-lg table-wrapper-scroll-y my-custom-scrollbar">
+    <h2 class="border-bottom mb-4">Upisani/Položeni predmeti</h2>
+    {% for semestar in predmeti.semestri %}
+          <table class="table table-hover">
+                  <h2>Semestar: {{ semestar.sem_redovni }} {{ semestar.sem_izvanredni }}</h2>
+
+
+                  <thead>
+                    <tr>
+                      <th scope="col">Naziv predmeta</th>
+                      <th scope="col">Broj bodova</th>
+                      <th scope="col">Izborni</th>
+                      <th scope="col">Opcije</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                      {% for predmet in predmeti.svi_predmeti %}
+                      {% for upis in predmeti.upisani %}
+                      {% if predmet.sem_redovni == semestar.sem_redovni and predmet.id == upis.predmet_id or predmet.sem_izvanredni == semestar.sem_izvanredni and predmet.id == upis.predmet_id%}
+                      <tr>
+
+                      <td>{{ predmet.ime }}</td>
+                      <td>{{ predmet.bodovi }}</td>
+                      <td>{{ predmet.izborni }}</td>
+                      <form method="POST">
+                          {% csrf_token %}
+                        {% if upis.status == 'enrolled' %}
+                        <td><button type="submit" value="{{ predmet.id }}" name="polozen" class="btn btn-outline-success">Označi kao položen</button></td>
+                        {% endif %}
+                        {% if upis.status == 'passed' %}
+                        <td><button type="submit" value="{{ predmet.id }}" name="nije_polozen" class="btn btn-outline-warning">Označi kao nepoložen</button></td>
+                        {% endif %}
+                        {% if user.role == 'mentor' %}
+                        <td><button type="submit" value="{{ predmet.id }}" name="izbrisi" class="btn btn-outline-danger">Ukloni predmet</button></td>
+                        {% endif %}
+                        </form>
+                      </tr>
+                      
+                      {% endif %}
+                      
+                      {% endfor %}
+                      
+
+                      {% endfor %}
+
+                  </tbody>
+          </table>
+ 
+  {% endfor %}
+  </div>
+
+
+
+<div class="content-section w-100 table-responsive table-wrapper-scroll-y my-custom-scrollbar">
+
+  <h2 class="border-bottom mb-4">Neupisani predmeti</h2>
+  {% for semestar in predmeti.semestri %}
+ 
+        <table class="table table-hover">
+                <h2>Semestar: {{ semestar.sem_redovni }} {{ semestar.sem_izvanredni }}</h2>
+                <thead>
+                  <tr>
+                    <th scope="col">Naziv predmeta</th>
+                    <th scope="col">Opcije</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for neupisani in predmeti.neupisani %}
+                    {% if neupisani.sem_redovni == semestar.sem_redovni or neupisani.sem_izvanredni == semestar.sem_izvanredni %}
+                    <tr>
+                    
+                    <td>{{ neupisani.ime }}</td>
+                    <form method="POST">
+                        {% csrf_token %}
+                      <td><button type="submit" value="{{ neupisani.id }}" name="upisi" class="btn btn-outline-primary">Upiši predmet</button></td>
+                      
+                      </form>
+                    </tr>
+                    {% endif %}
+
+
+                    {% endfor %}
+                </tbody>
+        </table>
+
+{% endfor %}
+</div>
+
+        
+{% endblock %}

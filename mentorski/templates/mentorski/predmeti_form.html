@@ -1,0 +1,17 @@
+{% extends "mentorski/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section col-md-8 offset-md-2">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="from-group">
+                <legend class="border-bottom mb-4">Predmet</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Napravi novi</button>
+                <a class="btn btn-outline-secondary" href="{% url 'mentorski-predmeti' %}">Natrag</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

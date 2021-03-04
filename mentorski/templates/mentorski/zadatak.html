@@ -1,0 +1,20 @@
+{% extends "mentorski/base.html" %}
+
+{% block content %}
+
+
+{% for upis in upisani %}
+{% if upis.predmet %}
+{{ upis.predmet }}
+{{ upis.student.username }}
+{% endif %}
+{% empty %}
+<h2>Nema takvog predmeta</h2>
+
+
+{% endfor %}
+
+
+
+{{ bar }}
+{% endblock %}
